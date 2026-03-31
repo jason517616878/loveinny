@@ -1,0 +1,26 @@
+name: Deploy to VPS
+
+on:
+  push:
+    branches: [ "main" ]
+
+
+jobs:
+  deploy:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Copy files via SSH
+      uses: appleboy/scp-action@v0.1.7
+      with:  
+          host: ${{ secrets.REMOTE_HOST }}
+          username: ${{ secrets.REMOTE_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 2422
+          source: "."
+          target: ${{ secrets.TARGET_DIR }}
+   
